@@ -6,13 +6,8 @@
 /*-----------------------------------------------------------------------------------------------*/
 /* Defines                                                                                       */
 /*-----------------------------------------------------------------------------------------------*/
-#define LED_PIN       GPIO_PIN_5
-#define LED_GPIO_PORT GPIOA
-
-/*-----------------------------------------------------------------------------------------------*/
-/* Macros                                                                                        */
-/*-----------------------------------------------------------------------------------------------*/
-#define LED_GPIO_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()
+#define LED_GREEN_PIN       (GPIO_PIN_5)
+#define LED_GREEN_GPIO_PORT (GPIOA)
 
 /*-----------------------------------------------------------------------------------------------*/
 /* Public functions                                                                              */
@@ -25,19 +20,22 @@
 int main(void) {
   GPIO_InitTypeDef gpioInit = {0};
 
+  /* Setup Flash, Systick and NVIC */
   HAL_Init();
 
-  LED_GPIO_CLK_ENABLE();
+  /* Enable GPIO port A clock used for LED pin */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
-  gpioInit.Pin = LED_PIN;
+  /* Configure LED pin as output */
+  gpioInit.Pin = LED_GREEN_PIN;
   gpioInit.Mode = GPIO_MODE_OUTPUT_PP;
   gpioInit.Pull = GPIO_PULLUP;
   gpioInit.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(LED_GPIO_PORT, &gpioInit); 
+  HAL_GPIO_Init(LED_GREEN_GPIO_PORT, &gpioInit);
 
   while (1) {
-    HAL_GPIO_TogglePin(LED_GPIO_PORT, LED_PIN);
-    HAL_Delay(1000);
+    HAL_GPIO_TogglePin(LED_GREEN_GPIO_PORT, LED_GREEN_PIN);
+    HAL_Delay(500);
   }
 }
 
