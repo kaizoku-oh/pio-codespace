@@ -25,7 +25,7 @@ ENV PATH="/root/.platformio/penv/bin:${PATH}"
 
 # Create a non-root user for security
 RUN useradd -ms /bin/bash pio_user
-USER platformio_user
+USER pio_user
 
 # Copy the current directory contents into the container at /workspace
 COPY . /workspace
