@@ -4,10 +4,10 @@
     "dockerfile": "Dockerfile",
     "context": "."
   },
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workdir/app,type=bind",
-  "workspaceFolder": "/workdir",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "workspaceFolder": "/workspace",
   "mounts": [
-    "source=${localWorkspaceFolder}/.vscode/,target=/workdir/.vscode,type=bind,consistency=cached"
+    "source=${localWorkspaceFolder}/.vscode/,target=/workspace/.vscode,type=bind,consistency=cached"
   ],
   "customizations": {
     "vscode": {
@@ -56,9 +56,7 @@
     }
   },
   "runArgs": [
-    // Optionally, give the container privileged access (useful for hardware access if needed)
     "--privileged",
-    // Grants access to USB devices
     "--device=/dev/bus/usb:/dev/bus/usb"
   ],
   "remoteUser": "pio_user"
