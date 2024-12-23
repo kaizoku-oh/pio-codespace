@@ -1,0 +1,65 @@
+{
+  "name": "PlatformIO Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workdir/app,type=bind",
+  "workspaceFolder": "/workdir",
+  "mounts": [
+    "source=${localWorkspaceFolder}/.vscode/,target=/workdir/.vscode,type=bind,consistency=cached"
+  ],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // Default terminal
+        "terminal.integrated.shell.linux": "/bin/bash",
+        // Render whitespaces
+        "editor.renderWhitespace": "all",
+        // Use material icon theme
+        "workbench.iconTheme": "material-icon-theme",
+        // Hush CMake
+        "cmake.configureOnOpen": false
+      },
+      "keybindings": [
+        {
+          "key": "ctrl+j",
+          "command": "editor.action.joinLines",
+          "when": "editorTextFocus"
+        },
+        {
+          "key": "ctrl+shift+k",
+          "command": "editor.action.commentLine",
+          "when": "editorTextFocus"
+        },
+        {
+          "key": "ctrl+alt+k",
+          "command": "editor.action.blockComment",
+          "when": "editorTextFocus"
+        }
+      ],
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-python.python",
+        "platformio.platformio-ide",
+        "ms-vscode.vscode-embedded-tools",
+        "marus25.cortex-debug",
+        "plorefice.devicetree",
+        "PKief.material-icon-theme",
+        "streetsidesoftware.code-spell-checker",
+        "eamodio.gitlens",
+        "ms-vscode.hexeditor",
+        "dan-c-underwood.arm",
+        "ZixuanWang.linkerscript",
+        "Gruntfuggly.todo-tree"
+      ]
+    }
+  },
+  "runArgs": [
+    // Optionally, give the container privileged access (useful for hardware access if needed)
+    "--privileged",
+    // Grants access to USB devices
+    "--device=/dev/bus/usb:/dev/bus/usb"
+  ],
+  "remoteUser": "pio_user"
+}
