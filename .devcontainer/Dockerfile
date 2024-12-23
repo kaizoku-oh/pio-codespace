@@ -15,19 +15,13 @@ RUN apt update && apt install -y \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-# Create a non-root user for security
-RUN useradd -ms /bin/bash pio_user
-
-# Switch to the non-root user
-USER pio_user
-
-# Install PlatformIO for the non-root user
+# Install PlatformIO as root
 RUN curl -fsSL -o get-platformio.py https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py \
     && python3 get-platformio.py \
     && rm get-platformio.py
 
-# Add PlatformIO's binary directory to PATH for pio_user
-ENV PATH="/home/pio_user/.platformio/penv/bin:${PATH}"
+# Add PlatformIO's binary directory to PATH for root (default user)
+ENV PATH="/root/.platformio/penv/bin:${PATH}"
 
 # Set the working directory to /workspace
 WORKDIR /workspace

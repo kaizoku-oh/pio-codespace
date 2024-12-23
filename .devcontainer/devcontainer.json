@@ -58,6 +58,5 @@
   "runArgs": [
     "--privileged",
     "--device=/dev/bus/usb:/dev/bus/usb"
-  ],
-  "remoteUser": "pio_user"
+  ]
 }
