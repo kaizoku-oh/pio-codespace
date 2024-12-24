@@ -6,8 +6,9 @@
 /*-----------------------------------------------------------------------------------------------*/
 /* Defines                                                                                       */
 /*-----------------------------------------------------------------------------------------------*/
-#define LED_GREEN_PIN       (GPIO_PIN_5)
-#define LED_GREEN_GPIO_PORT (GPIOA)
+#define LED_PIN            (GPIO_PIN_0)
+#define LED_GPIO_PORT      (GPIOB)
+#define LED_BLINK_DELAY_MS (200)
 
 /*-----------------------------------------------------------------------------------------------*/
 /* Public functions                                                                              */
@@ -23,19 +24,19 @@ int main(void) {
   /* Setup Flash, Systick and NVIC */
   HAL_Init();
 
-  /* Enable GPIO port A clock used for LED pin */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
+  /* Enable GPIO port B clock used for LED pin */
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /* Configure LED pin as output */
-  gpioInit.Pin = LED_GREEN_PIN;
+  gpioInit.Pin = LED_PIN;
   gpioInit.Mode = GPIO_MODE_OUTPUT_PP;
   gpioInit.Pull = GPIO_PULLUP;
   gpioInit.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(LED_GREEN_GPIO_PORT, &gpioInit);
+  HAL_GPIO_Init(LED_GPIO_PORT, &gpioInit);
 
   while (1) {
-    HAL_GPIO_TogglePin(LED_GREEN_GPIO_PORT, LED_GREEN_PIN);
-    HAL_Delay(500);
+    HAL_GPIO_TogglePin(LED_GPIO_PORT, LED_PIN);
+    HAL_Delay(LED_BLINK_DELAY_MS);
   }
 }
 
@@ -82,7 +83,6 @@ void PendSV_Handler(void) { }
   * @retval None
   */
 void HardFault_Handler(void) { while (1); }
-
 
 /**
   * @brief This function handles Memory management fault
