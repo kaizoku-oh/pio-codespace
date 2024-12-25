@@ -2,13 +2,15 @@
 /* Includes                                                                                      */
 /*-----------------------------------------------------------------------------------------------*/
 #include "stm32f7xx_hal.h"
+#include "bootutil/bootutil.h"
+#include "bootutil/image.h"
 
 /*-----------------------------------------------------------------------------------------------*/
 /* Defines                                                                                       */
 /*-----------------------------------------------------------------------------------------------*/
-#define LED_GREEN_PIN            (GPIO_PIN_0)
-#define LED_GREEN_GPIO_PORT      (GPIOB)
-#define LED_GREEN_BLINK_DELAY_MS (1000)
+#define LED_RED_PIN            (GPIO_PIN_14)
+#define LED_RED_GPIO_PORT      (GPIOB)
+#define LED_RED_BLINK_DELAY_MS (100)
 
 /*-----------------------------------------------------------------------------------------------*/
 /* Public functions                                                                              */
@@ -19,6 +21,8 @@
   * @retval None
   */
 int main(void) {
+  int ret = 0;
+  struct boot_rsp rsp = {0};
   GPIO_InitTypeDef gpioInit = {0};
 
   /* Setup Flash, Systick and NVIC */
@@ -28,15 +32,25 @@ int main(void) {
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /* Configure LED pin as output */
-  gpioInit.Pin = LED_GREEN_PIN;
+  gpioInit.Pin = LED_RED_PIN;
   gpioInit.Mode = GPIO_MODE_OUTPUT_PP;
   gpioInit.Pull = GPIO_PULLUP;
   gpioInit.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(LED_GREEN_GPIO_PORT, &gpioInit);
+  HAL_GPIO_Init(LED_RED_GPIO_PORT, &gpioInit);
 
+  /* Prepares the booting process and tells you what address to boot from */
+  ret = boot_go(&rsp);
+  if (ret == 0) {
+    /* Jump to application */
+    do_boot(&rsp);
+  } else {
+    LOG("No bootable image found");
+  }
+
+  /* Blink red LED to indicate a bootloader failure */
   while (1) {
-    HAL_GPIO_TogglePin(LED_GREEN_GPIO_PORT, LED_GREEN_PIN);
-    HAL_Delay(LED_GREEN_BLINK_DELAY_MS);
+    HAL_GPIO_TogglePin(LED_RED_GPIO_PORT, LED_RED_PIN);
+    HAL_Delay(LED_RED_BLINK_DELAY_MS);
   }
 }
 
