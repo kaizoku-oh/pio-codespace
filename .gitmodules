@@ -1,3 +1,0 @@
-[submodule "src/bootloader"]
-	path = src/bootloader
-	url = https://github.com/mcu-tools/mcuboot.git
