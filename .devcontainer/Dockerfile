@@ -11,9 +11,27 @@ RUN apt update && apt install -y \
     g++ \
     cmake \
     build-essential \
+    libglib2.0-dev \
+    libpixman-1-dev \
+    pkg-config \
+    ninja-build \
+    ca-certificates \
     libusb-1.0-0-dev \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
+
+# Clone and build QEMU for STM32
+RUN git clone --depth 1 https://github.com/beckus/qemu_stm32.git /opt/qemu_stm32 \
+    && cd /opt/qemu_stm32 \
+    && ./configure --target-list=arm-softmmu --disable-werror \
+    && make -j$(nproc) \
+    && make install
+
+# Optional: Clean up source to reduce image size
+RUN rm -rf /opt/qemu_stm32
+
+# Verify if Qemu is installed and added to path
+RUN qemu-system-arm --version
 
 # Install PlatformIO as root
 RUN curl -fsSL -o get-platformio.py https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py \
@@ -30,5 +48,5 @@ WORKDIR /workspace
 COPY . /workspace
 
 # Define the default command to run PlatformIO
-ENTRYPOINT ["platformio"]
+ENTRYPOINT ["pio"]
 CMD ["--help"]
